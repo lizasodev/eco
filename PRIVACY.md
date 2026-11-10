@@ -17,7 +17,19 @@ Se descarta **antes de escribir en disco**:
 - Ventanas cuyo título indique login, banco, PayPal, navegación privada/incógnito, 2FA/OTP o frases semilla.
 - Comandos de más de 2000 caracteres.
 
+También se descartan valores con forma de dato sensible, estén donde estén: claves de AWS/GitHub/GitLab/npm/Stripe/Google/Slack/Discord, JWT, IBAN, DNI/NIE, números de tarjeta (validados con Luhn) y cadenas opacas largas. Los hashes hexadecimales de git sí se permiten. Esto se aplica también a los títulos de ventana.
+
+> Estricto a propósito: una palabra como `auth` o `token` en un comando basta para descartarlo (p. ej. `git log --author` no se guardará). Ante la duda, no se guarda.
+
 La lista completa está en [`src/eco/privacy.py`](src/eco/privacy.py). Son heurísticas: **revisa y amplía** esa lista según tu caso.
+
+## Tus propias reglas
+Crea `~/.config/eco/privacy.txt` con una expresión regular por línea (sin distinguir mayúsculas). Prefijo `cmd:` para solo comandos y `window:` para solo ventanas; `#` para comentarios. Las regex inválidas se ignoran.
+
+    # ejemplos
+    cmd:mi-cliente-secreto
+    window:^Slack
+    cmd:\bmi-vpn\b
 
 ## Control total sobre tus datos
     eco stats                     # qué hay guardado

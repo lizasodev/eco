@@ -47,3 +47,34 @@ def test_empty_query(tmp_path, monkeypatch):
     monkeypatch.setenv("ECO_DB", str(tmp_path / "e.db"))
     con = db.connect()
     assert db.search(con, "   ") == [] and db.search(con, '"*') == []
+
+
+def test_expanded_filters(tmp_path, monkeypatch):
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    privacy._custom_rules.cache_clear()
+    blocked = [
+        "cat ~/.ssh/id_ed25519", "vim .env", "export AWS_SECRET_KEY=abc", "docker login -u me",
+        "mysql -u root -phunter2", "nmcli device wifi connect X password Y", "su - root",
+        "echo 4111 1111 1111 1111", "pay ES91 2100 0418 4502 0005 1332", "echo 12345678Z",
+        "curl https://hooks.slack.com/services/T000/B000/XXXX",
+        "echo Zm9vYmFyYmF6cXV4MTIzNDU2Nzg5MGFiY2RlZmdoaWo",
+    ]
+    for c in blocked:
+        assert not privacy.command_allowed(c), c
+    for ok in ["git show 3d3c42e5aac5ba805825da76410c181273ba90b1", "ls ~/proyectos/mi-app", "pytest -q",
+               "git commit -m 'fix parser'", "echo 4111 1111 1111 1112"]:
+        assert privacy.command_allowed(ok), ok
+    assert not privacy.window_allowed("firefox", "Tarjeta de crédito - Mi cuenta")
+    assert not privacy.window_allowed("kitty", "vim ~/.env")
+    assert privacy.window_allowed("kitty", "nvim cli.py")
+
+
+def test_custom_rules(tmp_path, monkeypatch):
+    (tmp_path / "eco").mkdir()
+    (tmp_path / "eco" / "privacy.txt").write_text("# mis reglas\ncmd:mi-cliente\nwindow:^Slack\n[roto(\n")
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path))
+    privacy._custom_rules.cache_clear()
+    assert not privacy.command_allowed("cd ~/mi-cliente")
+    assert privacy.window_allowed("kitty", "mi-cliente notas")     # regla solo de cmd
+    assert not privacy.window_allowed("slack", "Slack | general")
+    privacy._custom_rules.cache_clear()

@@ -1,6 +1,6 @@
 [project]
 name = "eco"
-version = "0.1.0"
+version = "0.1.1"
 description = "Tu segundo cerebro local: pregúntale a tu yo del pasado"
 readme = "README.md"
 license = "MIT"
