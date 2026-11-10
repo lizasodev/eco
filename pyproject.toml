@@ -1,0 +1,32 @@
+[project]
+name = "eco"
+version = "0.1.0"
+description = "Tu segundo cerebro local: pregúntale a tu yo del pasado"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+keywords = ["second-brain", "search", "privacy", "local-first", "sqlite", "hyprland", "terminal", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Topic :: Utilities",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/lizasodev/eco"
+Issues = "https://github.com/lizasodev/eco/issues"
+Security = "https://github.com/lizasodev/eco/security/policy"
+
+[project.scripts]
+eco = "eco.cli:main"
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
