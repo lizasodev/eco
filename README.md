@@ -31,6 +31,7 @@ Requiere Python ≥ 3.11 y Linux (el daemon de ventanas requiere Hyprland).
 - Datos en `~/.local/share/eco/eco.db`, permisos `0600`; carpeta `0700`.
 - Los secretos (tokens, claves, `sudo`, gestores de contraseñas, ventanas de login/banco/incógnito) se descartan **antes** de escribir en disco.
 - Cero dependencias en ejecución y cero conexiones de red.
+- Tus propias reglas en `~/.config/eco/privacy.txt`.
 - Detalle completo en [PRIVACY.md](PRIVACY.md) y [SECURITY.md](SECURITY.md).
 
 ## Hoja de ruta
